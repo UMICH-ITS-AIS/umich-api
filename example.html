@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UM APIs PHP access examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css">
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+  </head>
+  <body>
+
+<div class="container">
+  <p class="lead">
+	<h3 class="text-success">Examples from the PHP class that accesses the new UM APIs</h3>
+	UM APIs: <a href="https://api.it.umich.edu/store/">Browse</a>, <a href="http://developer.it.umich.edu/api/help">Help</a>
+	<br />
+	Written by: Mike Bleed, University of Michigan School of Dentistry
+  </p>
+
+<div class="panel-group" id="accordion">
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          <i class="glyphicon glyphicon-download"></i> MCommunity
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in">
+      <div class="panel-body">
+	  
+		<div class="col-md-12 well well-sm">
+			<h5>Use the JSON feed as the source of a typeahead component:</h5>
+			<label for="ex-typeahead-1">Find a person (live results): </label> <input type="text" name="query" id="ex-typeahead-1" />
+			<div id="ex-typeahead-response"></div>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			<h5>Get details on a person, by uniqname</h5>
+			<form id="ex1">
+				<label for="ex1-1">Uniqname: </label> <input type="text" name="uniqname" id="ex1-1" />
+				<input type="hidden" name="method" id="ex1-method" value="get_person" />
+				<input type="button" name="submit" id="ex1-submit" class="process btn" value="Get Person Details" />
+			</form>
+			<div id="ex1-response"></div>
+		</div>
+		<div class="col-md-12 well well-sm">
+			<h5>Search people</h5>
+			<form id="ex2">
+				<label for="ex2-1">Search: </label> <input type="text" name="query" id="ex2-1" />
+				<input type="hidden" name="method" id="ex2-method" value="search_people" />
+				<input type="button" name="submit" id="ex2-submit" class="process btn" value="Search People" />
+			</form>
+			<div id="ex2-response"></div>
+		</div>
+		
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          <i class="glyphicon glyphicon-download"></i> Buildings
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+	  
+        <div class="col-md-12 well well-sm">
+			Get Campuses and their campus codes.  We could use this to dynamically populate a dropbox:
+			<br />
+			<form id="ex3">
+				<label for="ex3-select">Campuses: </label>
+				<input type="hidden" name="method" id="ex3-method" value="get_campuses" />
+				<select id="ex3-select" name="campus"></select>
+			</form>
+		</div>
+	  
+		<div class="col-md-12 well well-sm">
+			When you select a campus, we can send that ID to the API and grab the list of buildings on that campus:
+			<br />
+			<form id="ex4">
+				<label for="ex4-select">Buildings: </label>
+				<input type="hidden" name="method" id="ex4-method" value="get_buildings" />
+				<select id="ex4-select" name="building"></select>
+			</form>
+		</div>
+		<div class="col-md-12">When you select a building, we can send that ID to the API and get detailed info:<div id="ex4-response"></div>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			<h5>Find building near given coordinates:</h5>
+			<form id="ex6">
+				<input type="button" id="ex6-btn" class="btn" value="Get My Current Position" />
+				<br />
+				<label for="latitude">Latitude: </label> <input type="text" name="latitude" id="latitude" />
+				<br />
+				<label for="longitude">Longitude: </label> <input type="text" name="longitude" id="longitude" />
+				<input type="hidden" name="method" id="ex6-method" value="get_buildings_nearby" />
+				<input type="button" name="submit" id="ex6-submit" class="process btn" value="Find Buildings Nearby" />
+			</form>
+		</div>
+		<div class="col-md-6"><div id="ex6-response"></div></div>
+		
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          <i class="glyphicon glyphicon-download"></i> Schedule of Classes
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+	  
+		<div class="col-md-12 well well-sm">
+			<h5>Search for classes (Winter 2014):</h5>
+			<form id="ex12">
+				<label for="ex12-1">Search Clases: </label> <input type="text" name="query" id="ex12-1" />
+				<input type="hidden" name="method" id="ex12-method" value="search_classes" />
+				<input type="hidden" name="term" id="term" value="1970" />
+				<input type="button" name="submit" id="ex12-submit" class="process btn" value="Search Classes" />
+			</form>
+			<div><table class="table" id="ex12-response"></table></div>
+		</div>
+	  
+		<div class="col-md-12 well well-sm">
+			Get Terms and their codes:
+			<br />
+			<form id="ex7">
+				<label for="ex7-select">Terms: </label>
+				<input type="hidden" name="method" id="ex7-method" value="get_terms" />
+				<select id="ex7-select" name="term"></select>
+			</form>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			When you select a term, we can send that ID to the API and grab the list of schools:
+			<br />
+			<form id="ex8">
+				<label for="ex8-select">Classes: </label>
+				<input type="hidden" name="method" id="ex8-method" value="get_schools" />
+				<select id="ex8-select" name="class"></select>
+			</form>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			When you select a school, we can send that ID to the API and grab the list of subjects:
+			<br />
+			<form id="ex9">
+				<label for="ex9-select">Classes: </label>
+				<input type="hidden" name="method" id="ex9-method" value="get_subjects" />
+				<select id="ex9-select" name="subject"></select>
+			</form>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			When you select a subject, we can send that ID to the API and grab the list of catalogs:
+			<br />
+			<form id="ex10">
+				<label for="ex10-select">Classes: </label>
+				<input type="hidden" name="method" id="ex10-method" value="get_catalogs" />
+				<select id="ex10-select" name="catalog"></select>
+			</form>
+		</div>
+		
+		<div class="col-md-12 well well-sm">
+			<div id="ex11-descr" class="lead"></div>
+			<div id="ex11-sections"></div>
+		</div>
+
+      </div> <!-- end panel body -->
+    </div> <!-- end panel-collpase -->
+  </div> <!-- end panel -->
+
+</div> <!-- end panel group -->
+
+</div> <!-- end container -->
+
+	<!-- end HTML -->
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.9.3/typeahead.min.js"></script>
+<!-- examples javascript -->
+<script>
+$(function() {
+/*
+	$('.process').click(function() {
+		var itemid = $(this).attr('id').substr(0,3);
+		$.getJSON( "/webservices/oauth-controller.php", $( '#'+itemid+'' ).serialize(), function( data ) { $('#'+itemid+'-response').html(JSON.stringify(data)); } );
+	});
+*/
+	$('#ex1-submit').click(function() {
+		$.getJSON( "/webservices/oauth-controller.php", $( '#ex1' ).serialize(), function( data ) {
+			$('#ex1-response').empty();
+			$.each(data.person, function(i, item) {
+				$('#ex1-response').append('<li>'+i+' - '+item+'</li>');
+			});
+		});
+	});
+	$('#ex2-submit').click(function() {
+		$.getJSON( "/webservices/oauth-controller.php", $( '#ex2' ).serialize(), function( data ) {
+			$('#ex2-response').empty();
+			$.each(data.person, function(i, item) {
+				if (typeof item.affiliation != "undefined") { var bio = item.affiliation.toString(); }
+				else { var bio = '?'; }
+				$('#ex2-response').append('<i class="glyphicon glyphicon-user"></i> '+item.displayName+' - '+bio+'<br />');
+			});
+		});
+	});
+	$('input#ex-typeahead-1').typeahead({
+		name: 'persons',
+		remote: {
+			url: '/webservices/oauth-controller.php?method=search_people&query=%QUERY',
+			filter: function (parsedResponse) {
+				var retVal = [];
+				$.each(parsedResponse.person, function(i, item) {
+					if (typeof item.affiliation != "undefined") { var bio = item.affiliation.toString(); }
+					else { var bio = ''; }
+					retVal.push( { 'value': '<b>'+item.displayName+'</b> '+bio, 'tokens': [item.uniqname,item.displayName], 'name': item.displayName } );
+				});
+				return retVal;
+			}
+		}
+	});
+	//ex3 get data for select
+	$.getJSON( "/webservices/oauth-controller.php?method=get_campuses", function( data ) {
+		$('#ex3-select').append('<option value=""></option>');
+		$.each(data.Campuses.Campus, function(i, item) {
+			$('#ex3-select').append('<option value="'+item.CampusCd+'">'+item.CampusDescr+'</option>');
+			//$('#ex3-response').append('<li>'+item.CampusDescr+' ('+item.CampusCd+')</li>');
+		});
+	});
+	$('#ex3-select').change(function() {
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_buildings', 'campus':$(this).val()} , function( data ) {
+			$('#ex4-select').empty();
+			$('#ex4-select').append('<option value=""></option>');
+			$.each(data.Buildings.Building, function(i, item) {
+				$('#ex4-select').append('<option value="'+item.ID+'">'+item.Name+'</option>');
+			});
+		});
+	});
+	$('#ex4-select').change(function() {
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_building', 'building':$(this).val()} , function( data ) {
+			$('#ex4-response').empty();
+			$.each(data.Buildings.Building, function(i, item) {
+				$('#ex4-response').append('<li>'+i+' ('+item+')</li>');
+			});
+			if (data.Buildings.Building.Longitude != 0) {
+			$('#ex4-response').append('<iframe width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q='+data.Buildings.Building.Latitude+','+data.Buildings.Building.Longitude+'&hl=es;z=14&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?q='+data.Buildings.Building.Latitude+','+data.Buildings.Building.Longitude+'&hl=es;z=14&amp;output=embed" target="_blank" class="btn"><i class="glyphicon glyphicon-globe"></i> See map bigger</a></small>');
+			}
+		});
+	});
+	$('#ex6-btn').click(function() {
+		if(navigator.geolocation) navigator.geolocation.getCurrentPosition(function(location) { $('#latitude').val(location.coords.latitude); $('#longitude').val(location.coords.longitude); }, function() { console.log('error'); });
+	});
+	$('#ex6-submit').click(function() {
+		$.getJSON( "/webservices/oauth-controller.php", $( '#ex6' ).serialize(), function( data ) {
+			$('#ex6-response').empty();
+			$('#ex6-response').append('<p>The 5 closest buildings to you:</p>');
+			$.each(data.Buildings.Building, function(i, item) {
+				$('#ex6-response').append('<li>'+item.Name+'</li>');
+				return i<4;
+			});
+		});
+	});
+	//ex7 get data for select
+	$.getJSON( "/webservices/oauth-controller.php?method=get_terms", function( data ) {
+		$('#ex7-select').append('<option value=""></option>');
+		$.each(data.getSOCTermsResponse.Term, function(i, item) {
+			$('#ex7-select').append('<option value="'+item.TermCode+'">'+item.TermDescr+'</option>');
+		});
+	});
+	$('#ex7-select').change(function() {
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_schools', 'term':$(this).val()} , function( data ) {
+			$('#ex8-select').empty();
+			$('#ex8-select').append('<option value=""></option>');
+			$.each(data.getSOCSchoolsResponse.School, function(i, item) {
+				$('#ex8-select').append('<option value="'+item.SchoolCode+'">'+item.SchoolDescr+'</option>');
+			});
+		});
+	});
+	$('#ex8-select').change(function() {
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_subjects', 'term': $('#ex7-select').val(), 'school':$(this).val()} , function( data ) {
+			$('#ex9-select').empty();
+			$('#ex9-select').append('<option value=""></option>');
+			$.each(data.getSOCSubjectsResponse.Subject, function(i, item) {
+				$('#ex9-select').append('<option value="'+item.SubjectCode+'">'+item.SubjectDescr+'</option>');
+			});
+		});
+	});
+	$('#ex9-select').change(function() {
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_catalogs', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject':$(this).val()} , function( data ) {
+			$('#ex10-select').empty();
+			$('#ex10-select').append('<option value=""></option>');
+			$.each(data.getSOCCtlgNbrsResponse.ClassOffered, function(i, item) {
+				$('#ex10-select').append('<option value="'+item.CatalogNumber+'">'+item.CourseDescr+'</option>');
+			});
+		});
+	});
+	$('#ex10-select').change(function() {
+		$('#ex11-descr').empty();
+		$('#ex11-sections').empty();
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_description', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
+			$('#ex11-descr').append(data.getSOCCourseDescrResponse.CourseDescr);
+		});
+		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_sections', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
+			if (typeof data.getSOCSectionsResponse.Section == 'Array') {
+				var section = data.getSOCSectionsResponse.Section.pop();
+			} else {
+				var section = data.getSOCSectionsResponse.Section;
+			}
+			$.each(section, function(i, item) {
+				if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
+			});
+			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_meetings', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+				$('#ex11-sections').append('<h3>Meeting</h3>');
+				$.each(data.getSOCMeetingsResponse.Meeting, function(i, item) {
+					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
+				});
+			});
+			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_instructors', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+				$('#ex11-sections').append('<h3>Instructor</h3>');
+				$.each(data.getSOCInstructorsResponse.Instructor, function(i, item) {
+					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
+				});
+			});
+			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_textbooks', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+				$('#ex11-sections').append('<h3>Textbook</h3>');
+				$.each(data.getSOCTextbooksResponse.Textbook, function(i, item) {
+					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
+				});
+			});
+		});
+	});
+	$('#ex12-submit').click(function() {
+		$.getJSON( "/webservices/oauth-controller.php", $( '#ex12' ).serialize(), function( data ) {
+			$('#ex12-response').empty();
+			$.each(data.searchSOCClassesResponse.SearchResult, function(i, item) {
+				$.getJSON( "/webservices/oauth-controller.php", {'method':'get_class','term':'1970','class':item.ClassNumber}, function( data ) {
+					var course = data.getSOCSectionListByNbrResponse.ClassOffered;
+	console.log( data.getSOCSectionListByNbrResponse.ClassOffered );
+					$('#ex12-response').append('<tr><td>'+course.Acad_Group+' '+course.CatalogNumber+'</td><td>'+course.CourseDescr+'</td><td>Credits: '+course.CreditHours+'</td><td>'+course.EnrollmentStatus+' ('+course.EnrollmentTotal+' of '+course.EnrollmentCapacity+') </td></tr>');
+				});
+			});
+		});
+	});
+});
+</script>
+
+<style>
+.twitter-typeahead .tt-query,
+.twitter-typeahead .tt-hint {
+  margin-bottom: 0;
+}
+
+.tt-dropdown-menu {
+  min-width: 160px;
+  margin-top: 2px;
+  padding: 5px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.2);
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding;
+          background-clip: padding-box;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0081c2;
+  background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
+  background-image: -o-linear-gradient(top, #0088cc, #0077b3);
+  background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0)
+}
+
+.tt-suggestion.tt-is-under-cursor a {
+  color: #fff;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+</style>
+  </body>
+</html>
