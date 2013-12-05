@@ -22,6 +22,8 @@
 	UM APIs: <a href="https://api.it.umich.edu/store/">Browse</a>, <a href="http://developer.it.umich.edu/api/help">Help</a>
 	<br />
 	Written by: Mike Bleed, University of Michigan School of Dentistry
+	<br />
+	To get started, view the <a href="README.md">ReadMe</a>
   </p>
 
 <div class="panel-group" id="accordion">
@@ -48,7 +50,7 @@
 			<form id="ex1">
 				<label for="ex1-1">Uniqname: </label> <input type="text" name="uniqname" id="ex1-1" />
 				<input type="hidden" name="method" id="ex1-method" value="get_person" />
-				<input type="button" name="submit" id="ex1-submit" class="process btn" value="Get Person Details" />
+				<input type="button" name="submit" id="ex1-submit" class="btn" value="Get Person Details" />
 			</form>
 			<div id="ex1-response"></div>
 		</div>
@@ -57,7 +59,7 @@
 			<form id="ex2">
 				<label for="ex2-1">Search: </label> <input type="text" name="query" id="ex2-1" />
 				<input type="hidden" name="method" id="ex2-method" value="search_people" />
-				<input type="button" name="submit" id="ex2-submit" class="process btn" value="Search People" />
+				<input type="button" name="submit" id="ex2-submit" class="btn" value="Search People" />
 			</form>
 			<div id="ex2-response"></div>
 		</div>
@@ -108,7 +110,7 @@
 				<br />
 				<label for="longitude">Longitude: </label> <input type="text" name="longitude" id="longitude" />
 				<input type="hidden" name="method" id="ex6-method" value="get_buildings_nearby" />
-				<input type="button" name="submit" id="ex6-submit" class="process btn" value="Find Buildings Nearby" />
+				<input type="button" name="submit" id="ex6-submit" class="btn" value="Find Buildings Nearby" />
 			</form>
 		</div>
 		<div class="col-md-6"><div id="ex6-response"></div></div>
@@ -134,7 +136,7 @@
 				<label for="ex12-1">Search Clases: </label> <input type="text" name="query" id="ex12-1" />
 				<input type="hidden" name="method" id="ex12-method" value="search_classes" />
 				<input type="hidden" name="term" id="term" value="1970" />
-				<input type="button" name="submit" id="ex12-submit" class="process btn" value="Search Classes" />
+				<input type="button" name="submit" id="ex12-submit" class="btn" value="Search Classes" />
 			</form>
 			<div><table class="table" id="ex12-response"></table></div>
 		</div>
@@ -202,14 +204,9 @@
 <!-- examples javascript -->
 <script>
 $(function() {
-/*
-	$('.process').click(function() {
-		var itemid = $(this).attr('id').substr(0,3);
-		$.getJSON( "/webservices/oauth-controller.php", $( '#'+itemid+'' ).serialize(), function( data ) { $('#'+itemid+'-response').html(JSON.stringify(data)); } );
-	});
-*/
+
 	$('#ex1-submit').click(function() {
-		$.getJSON( "/webservices/oauth-controller.php", $( '#ex1' ).serialize(), function( data ) {
+		$.getJSON( "access-controller.php", $( '#ex1' ).serialize(), function( data ) {
 			$('#ex1-response').empty();
 			$.each(data.person, function(i, item) {
 				$('#ex1-response').append('<li>'+i+' - '+item+'</li>');
@@ -217,7 +214,7 @@ $(function() {
 		});
 	});
 	$('#ex2-submit').click(function() {
-		$.getJSON( "/webservices/oauth-controller.php", $( '#ex2' ).serialize(), function( data ) {
+		$.getJSON( "access-controller.php", $( '#ex2' ).serialize(), function( data ) {
 			$('#ex2-response').empty();
 			$.each(data.person, function(i, item) {
 				if (typeof item.affiliation != "undefined") { var bio = item.affiliation.toString(); }
@@ -229,7 +226,7 @@ $(function() {
 	$('input#ex-typeahead-1').typeahead({
 		name: 'persons',
 		remote: {
-			url: '/webservices/oauth-controller.php?method=search_people&query=%QUERY',
+			url: 'access-controller.php?method=search_people&query=%QUERY',
 			filter: function (parsedResponse) {
 				var retVal = [];
 				$.each(parsedResponse.person, function(i, item) {
@@ -242,7 +239,7 @@ $(function() {
 		}
 	});
 	//ex3 get data for select
-	$.getJSON( "/webservices/oauth-controller.php?method=get_campuses", function( data ) {
+	$.getJSON( "access-controller.php?method=get_campuses", function( data ) {
 		$('#ex3-select').append('<option value=""></option>');
 		$.each(data.Campuses.Campus, function(i, item) {
 			$('#ex3-select').append('<option value="'+item.CampusCd+'">'+item.CampusDescr+'</option>');
@@ -250,7 +247,7 @@ $(function() {
 		});
 	});
 	$('#ex3-select').change(function() {
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_buildings', 'campus':$(this).val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_buildings', 'campus':$(this).val()} , function( data ) {
 			$('#ex4-select').empty();
 			$('#ex4-select').append('<option value=""></option>');
 			$.each(data.Buildings.Building, function(i, item) {
@@ -259,7 +256,7 @@ $(function() {
 		});
 	});
 	$('#ex4-select').change(function() {
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_building', 'building':$(this).val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_building', 'building':$(this).val()} , function( data ) {
 			$('#ex4-response').empty();
 			$.each(data.Buildings.Building, function(i, item) {
 				$('#ex4-response').append('<li>'+i+' ('+item+')</li>');
@@ -273,7 +270,7 @@ $(function() {
 		if(navigator.geolocation) navigator.geolocation.getCurrentPosition(function(location) { $('#latitude').val(location.coords.latitude); $('#longitude').val(location.coords.longitude); }, function() { console.log('error'); });
 	});
 	$('#ex6-submit').click(function() {
-		$.getJSON( "/webservices/oauth-controller.php", $( '#ex6' ).serialize(), function( data ) {
+		$.getJSON( "access-controller.php", $( '#ex6' ).serialize(), function( data ) {
 			$('#ex6-response').empty();
 			$('#ex6-response').append('<p>The 5 closest buildings to you:</p>');
 			$.each(data.Buildings.Building, function(i, item) {
@@ -283,14 +280,14 @@ $(function() {
 		});
 	});
 	//ex7 get data for select
-	$.getJSON( "/webservices/oauth-controller.php?method=get_terms", function( data ) {
+	$.getJSON( "access-controller.php?method=get_terms", function( data ) {
 		$('#ex7-select').append('<option value=""></option>');
 		$.each(data.getSOCTermsResponse.Term, function(i, item) {
 			$('#ex7-select').append('<option value="'+item.TermCode+'">'+item.TermDescr+'</option>');
 		});
 	});
 	$('#ex7-select').change(function() {
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_schools', 'term':$(this).val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_schools', 'term':$(this).val()} , function( data ) {
 			$('#ex8-select').empty();
 			$('#ex8-select').append('<option value=""></option>');
 			$.each(data.getSOCSchoolsResponse.School, function(i, item) {
@@ -299,7 +296,7 @@ $(function() {
 		});
 	});
 	$('#ex8-select').change(function() {
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_subjects', 'term': $('#ex7-select').val(), 'school':$(this).val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_subjects', 'term': $('#ex7-select').val(), 'school':$(this).val()} , function( data ) {
 			$('#ex9-select').empty();
 			$('#ex9-select').append('<option value=""></option>');
 			$.each(data.getSOCSubjectsResponse.Subject, function(i, item) {
@@ -308,7 +305,7 @@ $(function() {
 		});
 	});
 	$('#ex9-select').change(function() {
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_catalogs', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject':$(this).val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_catalogs', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject':$(this).val()} , function( data ) {
 			$('#ex10-select').empty();
 			$('#ex10-select').append('<option value=""></option>');
 			$.each(data.getSOCCtlgNbrsResponse.ClassOffered, function(i, item) {
@@ -319,10 +316,10 @@ $(function() {
 	$('#ex10-select').change(function() {
 		$('#ex11-descr').empty();
 		$('#ex11-sections').empty();
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_description', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_course_description', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
 			$('#ex11-descr').append(data.getSOCCourseDescrResponse.CourseDescr);
 		});
-		$.getJSON( "/webservices/oauth-controller.php", {'method':'get_sections', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
+		$.getJSON( "access-controller.php", {'method':'get_sections', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val()} , function( data ) {
 			if (typeof data.getSOCSectionsResponse.Section == 'Array') {
 				var section = data.getSOCSectionsResponse.Section.pop();
 			} else {
@@ -331,19 +328,19 @@ $(function() {
 			$.each(section, function(i, item) {
 				if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
 			});
-			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_meetings', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+			$.getJSON( "access-controller.php", {'method':'get_course_meetings', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
 				$('#ex11-sections').append('<h3>Meeting</h3>');
 				$.each(data.getSOCMeetingsResponse.Meeting, function(i, item) {
 					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
 				});
 			});
-			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_instructors', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+			$.getJSON( "access-controller.php", {'method':'get_course_instructors', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
 				$('#ex11-sections').append('<h3>Instructor</h3>');
 				$.each(data.getSOCInstructorsResponse.Instructor, function(i, item) {
 					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
 				});
 			});
-			$.getJSON( "/webservices/oauth-controller.php", {'method':'get_course_textbooks', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
+			$.getJSON( "access-controller.php", {'method':'get_course_textbooks', 'term': $('#ex7-select').val(), 'school': $('#ex8-select').val(), 'subject': $('#ex9-select').val(), 'catalog':$('#ex10-select').val(), 'section':section.SectionNumber} , function( data ) {
 				$('#ex11-sections').append('<h3>Textbook</h3>');
 				$.each(data.getSOCTextbooksResponse.Textbook, function(i, item) {
 					if (typeof item == "string") { $('#ex11-sections').append('<li>'+i+' - '+item+'</li>'); }
@@ -352,10 +349,10 @@ $(function() {
 		});
 	});
 	$('#ex12-submit').click(function() {
-		$.getJSON( "/webservices/oauth-controller.php", $( '#ex12' ).serialize(), function( data ) {
+		$.getJSON( "access-controller.php", $( '#ex12' ).serialize(), function( data ) {
 			$('#ex12-response').empty();
 			$.each(data.searchSOCClassesResponse.SearchResult, function(i, item) {
-				$.getJSON( "/webservices/oauth-controller.php", {'method':'get_class','term':'1970','class':item.ClassNumber}, function( data ) {
+				$.getJSON( "access-controller.php", {'method':'get_class','term':'1970','class':item.ClassNumber}, function( data ) {
 					var course = data.getSOCSectionListByNbrResponse.ClassOffered;
 	console.log( data.getSOCSectionListByNbrResponse.ClassOffered );
 					$('#ex12-response').append('<tr><td>'+course.Acad_Group+' '+course.CatalogNumber+'</td><td>'+course.CourseDescr+'</td><td>Credits: '+course.CreditHours+'</td><td>'+course.EnrollmentStatus+' ('+course.EnrollmentTotal+' of '+course.EnrollmentCapacity+') </td></tr>');
