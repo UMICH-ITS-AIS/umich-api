@@ -1,6 +1,6 @@
 <?php
 //include and instantiate UM API class
-include_once 'oauth-class.php';
+include_once 'access-class.php';
 $webservice = new UMapis;
 
 //get incoming method param to determine routing
